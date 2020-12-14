@@ -172,6 +172,7 @@ float const AudioSpectrumItemSpace = 1.0;//元素间隔
 @property (nonatomic, strong) NSMutableArray *levelArray;
 @property (nonatomic, strong) NSMutableArray *itemLineLayers;
 @property (nonatomic, strong) CADisplayLink *displayLink;
+@property (nonatomic ,assign) CGFloat level;
 
 @end
 
@@ -232,8 +233,13 @@ float const AudioSpectrumItemSpace = 1.0;//元素间隔
 }
 
 - (void)stopSpectrum {
+    [_displayLink removeFromRunLoop:NSRunLoop.currentRunLoop forMode:NSRunLoopCommonModes];
     [_displayLink invalidate];
     _displayLink = nil;
+}
+
+- (void)timerClick{
+    self.level = self.itemLevelBlock();
 }
 
 #pragma mark - setter and getters
@@ -273,10 +279,11 @@ float const AudioSpectrumItemSpace = 1.0;//元素间隔
     return _itemLineLayers;
 }
 
+//CADisplayLink 以屏幕刷新率相同的频率将内容画到屏幕上的定时器：精确度比 NSTimer 略高
 - (CADisplayLink *)displayLink{
     if (_displayLink == nil) {
-        _displayLink = [CADisplayLink displayLinkWithTarget:_itemLevelCallback selector:@selector(invoke)];
-        _displayLink.frameInterval = 6.f;
+        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(timerClick)];
+        _displayLink.preferredFramesPerSecond = 6.0;
         [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     }
     return _displayLink;

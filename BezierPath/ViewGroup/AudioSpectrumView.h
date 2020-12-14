@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/** 条形
+/** 条形音谱
  */
 @interface AudioSpectrumStripView : UIScrollView
 
@@ -29,11 +29,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-///波形
+///波形音谱
 @interface AudioSpectrumWaveView : UIScrollView
 
-@property (nonatomic ,copy) void (^itemLevelCallback)(void);
-@property (nonatomic ,assign) CGFloat level;
+@property (nonatomic ,copy) CGFloat (^itemLevelBlock)(void);
 
 - (void)startSpectrum;
 - (void)stopSpectrum;

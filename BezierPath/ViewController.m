@@ -39,6 +39,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *item = self.dataArray[indexPath.row];
     if ([item isEqualToString:@"音谱"]) {
         AudioViewController *audioVC = [[AudioViewController alloc] init];
@@ -58,7 +59,6 @@
         _dataArray = [NSMutableArray array];
         [_dataArray addObject:@"音谱"];
         [_dataArray addObject:@"贝塞尔曲线上的点移动"];
-
     }
     return _dataArray;
 }

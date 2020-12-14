@@ -84,11 +84,10 @@
     if (_spectrumWaveView == nil) {
         AudioSpectrumWaveView *spectrumView = [[AudioSpectrumWaveView alloc] initWithFrame:CGRectMake(12,250,300, 60)];
         __weak typeof (self) weakSelf = self;
-        __weak AudioSpectrumWaveView * weakSpectrum = spectrumView;
-        spectrumView.itemLevelCallback = ^() {
-            [weakSelf.audioPlayer updateMeters];
-            float power= [weakSelf.audioPlayer averagePowerForChannel:1];
-            weakSpectrum.level = power;
+        spectrumView.itemLevelBlock = ^CGFloat{
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            [strongSelf.audioPlayer updateMeters];
+            return [strongSelf.audioPlayer averagePowerForChannel:1];
         };
         _spectrumWaveView = spectrumView;
         
